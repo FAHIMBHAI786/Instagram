@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,15 @@ public class SignUpActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        TextView goToLogIn = findViewById(R.id.goToLogIn);
+        goToLogIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(SignUpActivity.this,LoginActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
         ImageButton signUpBackBtn = findViewById(R.id.signUpBackBtn);
         signUpBackBtn.setOnClickListener(view -> onBackPressed());
 
@@ -34,6 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(SignUpActivity.this,SignUpWithEmail.class);
                 startActivity(i);
+                finish();
             }
         });
 
@@ -43,4 +54,5 @@ public class SignUpActivity extends AppCompatActivity {
         // Handle custom back button behavior here
         // For example, navigate back to the previous activity or perform any custom action
         super.onBackPressed();
+        finish();
     }}

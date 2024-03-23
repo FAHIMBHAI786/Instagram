@@ -11,4 +11,10 @@
     <string name="mobile_number">Mobile number</string>
     <string name="you_may_receive_sms_notification_from_us_for_security_and_login_purposes">You may receive SMS notification from us for security and login purposes.</string>
     <string name="sign_up_with_email">Sign up with email</string>
+    <string name="next">Next</string>
+    <string name="what_s_your_email">What\'s your email?</string>
+    <string name="enter_the_email_where_you_can_be_contacted_no_one_will_see_this_on_your_profile">Enter the email where you can be contacted.No one will see this on your profile</string>
+    <string name="email">Email</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="sign_up_with_mobile_number">Sign up with mobile number</string>
 </resources>
