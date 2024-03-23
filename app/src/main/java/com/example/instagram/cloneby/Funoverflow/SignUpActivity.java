@@ -83,9 +83,14 @@ public class SignUpActivity extends AppCompatActivity {
                                     @Override
                                     public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                                         super.onCodeSent(s, forceResendingToken);
-                                        verificationCode =s;
+                                        verificationCode = s;
                                         resendingToken = forceResendingToken;
                                         AndroidUtils.showToast(getApplicationContext(),"OTP send successfully");
+                                        Intent i = new Intent(SignUpActivity.this,OtpConfirmation.class);
+                                        i.putExtra("phoneNumber",phoneNumber);
+                                        i.putExtra("verificationCode", verificationCode);
+                                        startActivity(i);
+
 
                                     }
                                 })          // OnVerificationStateChangedCallbacks

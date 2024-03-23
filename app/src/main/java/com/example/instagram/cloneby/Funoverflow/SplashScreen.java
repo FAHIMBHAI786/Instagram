@@ -10,7 +10,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class SplashScreen extends AppCompatActivity {
+
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +27,25 @@ public class SplashScreen extends AppCompatActivity {
             return insets;
         });
 
+        auth = FirebaseAuth.getInstance();
+
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent iMain = new Intent(SplashScreen.this,LoginActivity.class);
-                startActivity(iMain);
-                finish();
+                if (auth.getCurrentUser() != null) {
+                    // User is already logged in, navigate to MainActivity
+                    Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+                    startActivity(intent);
+                    finish(); // Prevent returning to SplashActivity if back button is pressed
+                } else {
+                    // User is not logged in, navigate to LoginActivity
+                    Intent intent = new Intent(SplashScreen.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish(); // Prevent returning to SplashActivity if back button is pressed
+                }
+
+
             }
         },1000);
 
