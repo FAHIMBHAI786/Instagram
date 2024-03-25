@@ -1,7 +1,10 @@
 package com.example.instagram.cloneby.Funoverflow.models;
 
+import com.google.firebase.Timestamp;
+
 public class Users {
-    String profilePic, userName,mail,password,userId,lastMessage;
+   private String profilePic, userName,mail,password,userId,lastMessage,phoneNumber;
+   private Timestamp timeStamp;
 
     public Users(String profilePic, String userName, String mail, String password, String userId, String lastMessage) {
         this.profilePic = profilePic;
@@ -22,6 +25,37 @@ public class Users {
         this.password = password;
         this.userId = userId;
 
+    }
+
+    public Users(String userName, String phoneNumber, Timestamp timeStamp) {
+        this.userName = userName;
+        this.phoneNumber = phoneNumber;
+        this.timeStamp = timeStamp;
+    }
+
+    public Users(String userName, Timestamp timeStamp) {
+        this.userName = userName;
+        this.timeStamp = timeStamp;
+    }
+
+    public Users(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Timestamp getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(Timestamp timeStamp) {
+        this.timeStamp = timeStamp;
     }
 
     public String getProfilePic() {

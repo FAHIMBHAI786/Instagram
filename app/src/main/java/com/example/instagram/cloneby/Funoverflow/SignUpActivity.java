@@ -2,6 +2,8 @@ package com.example.instagram.cloneby.Funoverflow;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -35,6 +37,8 @@ public class SignUpActivity extends AppCompatActivity {
     String verificationCode;
     PhoneAuthProvider.ForceResendingToken resendingToken;
 
+    Dialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,40 +66,49 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                String phoneNumber = etMobileNumber.getText().toString().trim();
-                PhoneAuthOptions options =
-                        PhoneAuthOptions.newBuilder(auth)
-                                .setPhoneNumber("+91"+phoneNumber)       // Phone number to verify
-                                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                                .setActivity(SignUpActivity.this)                 // (optional) Activity for callback binding
-                                // If no activity is passed, reCAPTCHA verification can not be used.
-                                .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                                    @Override
-                                    public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+               if(phoneNumber.length()<10){
+                   etMobileNumber.setError("Please enter valid number");
+               }else {
+                   ProgressDialog progressDialog = new ProgressDialog(SignUpActivity.this);
+                   progressDialog.setMessage("Logging in...");
+                   progressDialog.setCancelable(false); // Prevents user from cancelling the dialog
+                   progressDialog.show();
+                   PhoneAuthOptions options =
+                           PhoneAuthOptions.newBuilder(auth)
+                                   .setPhoneNumber("+91" + phoneNumber)       // Phone number to verify
+                                   .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                                   .setActivity(SignUpActivity.this)                 // (optional) Activity for callback binding
+                                   // If no activity is passed, reCAPTCHA verification can not be used.
+                                   .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                                       @Override
+                                       public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
 
-                                        signIn(phoneAuthCredential);
-                                    }
-                                    @Override
-                                    public void onVerificationFailed(@NonNull FirebaseException e) {
-                                        AndroidUtils.showToast(getApplicationContext(),"OTP verification failed");
+                                           signIn(phoneAuthCredential);
+                                       }
 
-                                    }
+                                       @Override
+                                       public void onVerificationFailed(@NonNull FirebaseException e) {
+                                           AndroidUtils.showToast(getApplicationContext(), "OTP verification failed");
 
-                                    @Override
-                                    public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                                        super.onCodeSent(s, forceResendingToken);
-                                        verificationCode = s;
-                                        resendingToken = forceResendingToken;
-                                        AndroidUtils.showToast(getApplicationContext(),"OTP send successfully");
-                                        Intent i = new Intent(SignUpActivity.this,OtpConfirmation.class);
-                                        i.putExtra("phoneNumber",phoneNumber);
-                                        i.putExtra("verificationCode", verificationCode);
-                                        startActivity(i);
+                                       }
+
+                                       @Override
+                                       public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                                           super.onCodeSent(s, forceResendingToken);
+                                           verificationCode = s;
+                                           resendingToken = forceResendingToken;
+                                           AndroidUtils.showToast(getApplicationContext(), "OTP send successfully");
+                                           Intent i = new Intent(SignUpActivity.this, OtpConfirmation.class);
+                                           i.putExtra("phoneNumber", phoneNumber);
+                                           i.putExtra("verificationCode", verificationCode);
+                                           startActivity(i);
 
 
-                                    }
-                                })          // OnVerificationStateChangedCallbacks
-                                .build();
-                PhoneAuthProvider.verifyPhoneNumber(options);
+                                       }
+                                   })          // OnVerificationStateChangedCallbacks
+                                   .build();
+                   PhoneAuthProvider.verifyPhoneNumber(options);
+               }
             }
         });
 

@@ -1,5 +1,6 @@
 package com.example.instagram.cloneby.Funoverflow;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -23,8 +24,9 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 public class OtpConfirmation extends AppCompatActivity {
-    String verificationCode;
+    String verificationCode,phoneNumber;
     FirebaseAuth auth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +46,21 @@ public class OtpConfirmation extends AppCompatActivity {
         verifyOtp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ProgressDialog progressDialog = new ProgressDialog(OtpConfirmation.this);
+                progressDialog.setMessage("Logging in...");
+                progressDialog.setCancelable(false); // Prevents user from cancelling the dialog
+                progressDialog.show();
                 String enteredOtp = etOtp.getText().toString().trim();
                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode,enteredOtp);
                signIn(credential);
             }
         });
+
         TextView otpNumber = findViewById(R.id.otpNumber);
         Intent intent = getIntent();
+//
         if (intent != null) {
-            String phoneNumber = intent.getStringExtra("phoneNumber");
+            phoneNumber = intent.getStringExtra("phoneNumber");
             otpNumber.setText("To confirm your account,enter the 6-digit code we sent via SMS to +91"+phoneNumber);
             // Now you have the phone number, you can use it as needed
         } else {
@@ -66,8 +74,11 @@ public class OtpConfirmation extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
+
                 if (task.isSuccessful()){
-                    Intent i = new Intent(OtpConfirmation.this,MainActivity.class);
+                    Intent i = new Intent(OtpConfirmation.this, UserProfileActivity.class);
+                    phoneNumber = i.getStringExtra("phoneNumber");
+                    i.putExtra("phoneNumber",phoneNumber);
                     startActivity(i);
                     finish();
 
